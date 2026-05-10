@@ -1,7 +1,5 @@
 stages:
-  - validate
-  - test
-  - secret-detection
+  - pre-release-checks
   - release
   - publish
 
@@ -13,13 +11,13 @@ variables:
   SECRET_DETECTION_ENABLED: 'true'
 
 sast:
-  stage: test
+  stage: pre-release-checks
 
 secret_detection:
-  stage: secret-detection
+  stage: pre-release-checks
 
 validate:package:
-  stage: validate
+  stage: pre-release-checks
   image: node:20-alpine
   script:
     - |
