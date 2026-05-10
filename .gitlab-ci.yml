@@ -2,6 +2,7 @@ stages:
   - validate
   - test
   - secret-detection
+  - release
   - publish
 
 include:
@@ -32,6 +33,43 @@ validate:package:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH'
+
+release:on-main:
+  stage: release
+  image: node:20-alpine
+  script:
+    - |
+      if [ -z "$GITLAB_TOKEN" ]; then
+        echo "GITLAB_TOKEN is required (api + write_repository scope)"
+        exit 1
+      fi
+    - export VERSION=$(node -p "require('./package.json').version")
+    - export TAG_NAME="v${VERSION}"
+    - echo "Preparing release for ${TAG_NAME}"
+    - |
+      TAG_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+        --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/tags/${TAG_NAME}")
+
+      if [ "$TAG_STATUS" = "200" ]; then
+        echo "Tag ${TAG_NAME} already exists. Skipping tag/release creation."
+        exit 0
+      fi
+    - |
+      curl --fail --request POST \
+        --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        --data "tag_name=${TAG_NAME}" \
+        --data "ref=${CI_COMMIT_SHA}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/tags"
+    - |
+      curl --fail --request POST \
+        --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        --data "name=${TAG_NAME}" \
+        --data "tag_name=${TAG_NAME}" \
+        --data-urlencode "description=Automated release for ${TAG_NAME}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
 
 publish:gitlab-package:
   stage: publish
