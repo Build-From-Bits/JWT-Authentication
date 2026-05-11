@@ -1,5 +1,5 @@
 {
-  "name": "@truflect/ui-jwt-authentication",
+  "name": "@truflect/jwt-authentication",
   "version": "0.1.0",
   "description": "Simple JWT authentication helper library for browser UI apps.",
   "type": "module",
@@ -16,7 +16,7 @@
     "test": "echo \"No tests configured\"",
     "pack:check": "npm pack --dry-run",
     "publish:npm": "npm publish --access public",
-    "publish:gitlab": "npm publish --registry ${NPM_REGISTRY_URL}"
+    "publish:github": "npm publish --registry https://npm.pkg.github.com"
   },
   "keywords": [
     "jwt",

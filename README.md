@@ -1,4 +1,4 @@
-# UI-JWT-Authentication
+# JWT Authentication
 
 Minimal browser-side JWT auth library with:
 - login (username/password)
@@ -12,7 +12,7 @@ Minimal browser-side JWT auth library with:
 ## Install
 
 ```bash
-npm install @truflect/ui-jwt-authentication
+npm install @truflect/jwt-authentication
 ```
 
 ## Default Auth Paths
@@ -26,7 +26,7 @@ npm install @truflect/ui-jwt-authentication
 ## Basic Setup
 
 ```js
-import { createAuthSystem } from '@truflect/ui-jwt-authentication';
+import { createAuthSystem } from '@truflect/jwt-authentication';
 
 const auth = createAuthSystem({
   baseUrl: 'https://your-api.example.com',
@@ -68,17 +68,12 @@ const { authService, client, session } = createAuthSystem({
   env: process.env,
 });
 
-// App bootstrap
 await session.initialize();
-
-// Login -> stores access in sessionStorage, refresh in localStorage
 await authService.login({ username: 'demo', password: 'demo123' });
 
-// Authenticated API call
 const response = await client.get('/v2/user/profile/');
 console.log(response.data);
 
-// Logout -> clears both tokens locally
 await authService.logout();
 ```
 
@@ -87,28 +82,22 @@ await authService.logout();
 ```bash
 npm run pack:check
 npm run publish:npm
-npm run publish:gitlab
+npm run publish:github
 ```
 
-`publish:gitlab` expects:
-- `NPM_REGISTRY_URL` env var (for example `https://gitlab.com/api/v4/projects/<project_id>/packages/npm/`)
-- auth token configured in `.npmrc`
+## GitHub Actions Release + Publish
 
-Use `.npmrc.example` as template.
+Workflow file:
+- `.github/workflows/release.yml`
 
-## GitLab CI Publish
+On push to `main`, it:
+1. runs pre-release checks (`npm run pack:check`)
+2. reads version from `package.json`
+3. creates tag `v<version>` if not already present
+4. creates a GitHub release
+5. publishes package to GitHub Packages (`npm.pkg.github.com`)
 
-Included file: `.gitlab-ci.yml`
-
-- `validate:package` runs on branches/MRs
-- `publish:gitlab-package` runs on tags and publishes to GitLab Package Registry
-
-Tag-based release example:
-
-```bash
-git tag v0.1.1
-git push origin v0.1.1
-```
+For GitHub Packages, ensure repository/package permissions allow publish.
 
 ## Browser Demo
 

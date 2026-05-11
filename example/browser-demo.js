@@ -9,7 +9,7 @@ const auth = createAuthSystem({
 
 const log = (...args) => {
   // eslint-disable-next-line no-console
-  console.log('[UI-JWT-Authentication demo]', ...args);
+  console.log('[JWT Authentication demo]', ...args);
 };
 
 async function runDemo() {
@@ -20,7 +20,6 @@ async function runDemo() {
   if (!auth.session.isAuthenticated()) {
     log('No valid session. Attempting login...');
 
-    // Replace with real values for your local backend.
     const username = 'demo_user';
     const password = 'demo_password';
 
