@@ -14,7 +14,7 @@ export const createAuthService = ({ config, tokenStorage, axiosOptions = {} }) =
 
   const login = async ({ username, password, ...extraPayload }) => {
     const response = await authHttp.post(config.AUTH_LOGIN_PATH, {
-      username,
+      [config.LOGIN_USERNAME_KEY]: username,
       password,
       ...extraPayload,
     });

@@ -39,6 +39,7 @@ export const buildAuthConfig = ({ env = {}, baseUrl = '', overrides = {} } = {})
     REFRESH_REQUEST_KEY: overrides.REFRESH_REQUEST_KEY || 'refresh',
     VERIFY_REQUEST_KEY: overrides.VERIFY_REQUEST_KEY || 'token',
     LOGOUT_REQUEST_KEY: overrides.LOGOUT_REQUEST_KEY || 'refresh',
+    LOGIN_USERNAME_KEY: overrides.LOGIN_USERNAME_KEY || 'username',
     ENABLE_LOGOUT_API_CALL:
       typeof overrides.ENABLE_LOGOUT_API_CALL === 'boolean' ? overrides.ENABLE_LOGOUT_API_CALL : false,
   };
