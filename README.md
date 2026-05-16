@@ -52,6 +52,9 @@ const auth = createAuthSystem({
     AUTH_LOGOUT_PATH: '/custom/auth/logout/',
     LOGOUT_REQUEST_KEY: 'refresh_token',
     ENABLE_LOGOUT_API_CALL: false,
+
+    // Customize the key for the username/phone field in login request
+    LOGIN_USERNAME_KEY: 'username', 
   },
   tokenKeys: {
     accessTokenKey: 'my_access_token',
