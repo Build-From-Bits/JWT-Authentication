@@ -118,3 +118,9 @@ Then open:
 - `http://localhost:3000/example/`
 
 Update `username`, `password`, and API URL in `example/browser-demo.js` for your backend.
+
+## License
+
+Licensed under the Apache License 2.0.
+
+Copyright 2026 Build From Bits Pvt Ltd.
